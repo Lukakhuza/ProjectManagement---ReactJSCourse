@@ -8,11 +8,32 @@ function App() {
   const [projectsState, setProjectsState] = useState({
     selectedProjectId: undefined,
     projects: [],
+    tasks: [],
   });
 
-  // function handleStartAddProject() {
-  //   setProjectsState((prevState)=> {...projectsState, selectedProjectId: 1}
-  // }}
+  function handleAddTask(text) {
+    setProjectsState((prevState) => {
+      const taskId = Math.random();
+      const newTask = {
+        text: text,
+        projectId: prevState.selectedProjectId,
+        id: taskId,
+      };
+      return {
+        ...prevState,
+        tasks: [...prevState.tasks, newTask],
+      };
+    });
+  }
+
+  function handleDeleteTask(id) {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        tasks: prevState.tasks.filter((task) => task.id !== id),
+      };
+    });
+  }
 
   function handleSelectProject(id) {
     setProjectsState((prevState) => {
@@ -56,8 +77,6 @@ function App() {
     });
   }
 
-  console.log(projectsState);
-
   function handleDeleteProject() {
     setProjectsState((prevState) => {
       return {
@@ -75,9 +94,15 @@ function App() {
   );
 
   let content = (
-    <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />
+    <SelectedProject
+      project={selectedProject}
+      onDelete={handleDeleteProject}
+      onAddTask={handleAddTask}
+      onDeleteTask={handleDeleteTask}
+      tasks={projectsState.tasks}
+    />
   );
-  console.log(projectsState.selectedProjectId);
+
   if (projectsState.selectedProjectId === null) {
     content = (
       <NewProject onAdd={handleAddproject} onCancel={handleCancelAddProject} />
@@ -87,16 +112,14 @@ function App() {
       content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
     }
   }
-  console.log(projectsState.selectedProjectId);
   return (
     <main className="h-screen my-8 flex gap-8">
       <ProjectsList
         onStartAddProject={handleStartAddProject}
         projects={projectsState.projects}
         onSelectProject={handleSelectProject}
+        selectedProjectId={projectsState.selectedProjectId}
       />
-      {/* <NewProject /> */}
-      {/* <NoProjectSelected onStartAddProject={handleStartAddProject} /> */}
       {content}
     </main>
   );

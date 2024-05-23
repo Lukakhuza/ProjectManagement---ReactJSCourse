@@ -10,6 +10,10 @@ export default function NewProject({ onAdd, onCancel }) {
   const description = useRef();
   const dueDate = useRef();
 
+  console.log(dueDate);
+  console.log(title);
+  console.log(description);
+
   function handleSave() {
     const enteredTitle = title.current.value;
     const enteredDescription = description.current.value;
@@ -31,6 +35,10 @@ export default function NewProject({ onAdd, onCancel }) {
       dueDate: enteredDuedate,
     });
   }
+
+  console.log(dueDate);
+  console.log(title);
+  console.log(description);
 
   return (
     <>
